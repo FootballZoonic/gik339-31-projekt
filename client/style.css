@@ -4,9 +4,6 @@ body {
   margin: 0;
   background: linear-gradient(to top, var(--bs-indigo), var(--bs-info));
 }
-header {
-  margin-bottom: 5rem;
-}
 
 .hov:hover {
   outline: 2px solid var(--bs-light);
