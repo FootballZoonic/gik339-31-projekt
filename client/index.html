@@ -26,17 +26,17 @@
         >
         <a
           class="link-underline link-underline-opacity-0 text-light"
-          href="mailto:h22jimha@.se"
+          href="mailto:h22jimha@du.se"
           >Jimmy</a
         >
         <a
           class="link-underline link-underline-opacity-0 text-light"
-          href="mailto:h22ramwa@.se"
+          href="mailto:h22ramwa@du.se"
           >Raman</a
         >
         <a
           class="link-underline link-underline-opacity-0 text-light"
-          href="mailto:h22elika@.se"
+          href="mailto:h22elkal@du.se"
           >Elias</a
         >
       </div>
@@ -73,16 +73,18 @@
         <div class="mb-3 col-12 col-md-6">
           <label for="weight" class="form-label">Weight</label>
           <input
-            type="number"
+            type="text"
             class="form-control"
-            id="name"
-            pattern="^[a-zA-Z]+$"
-            aria-label="First Name"
-            aria-describedby="firstNameHelp"
-            placeholder="In gram"
+            id="weight"
+            aria-label="Weight"
+            aria-describedby="weightHelp"
+            placeholder="In grams"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
             required
           />
         </div>
+        
+        
         <div class="mb-3 col-12 col-md-6">
           <label for="sound" class="form-label">Sound</label>
           <input
@@ -110,21 +112,20 @@
         </div>
         <div class="position-relative">
           <div class="row mt-4">
-              <div class="col">
-                <button type="reset" class="btn btn-success mt-2 col-12"><i class="bi bi-plus-circle"></i><br>Create</button>
+              <div class="col" id="btnSubmit">
+                <button type="reset" class="btn btn-success mt-2 col-12 hov"><i class="bi bi-plus-circle"></i><br>Create</button>
               </div>
-              <div class="col">
-                <button type="button" class="btn btn-info mt-2 col-12"><i class="bi bi-search"></i><br>Read</button>
+              <div class="col" id="btnSearch">
+                <button type="button" class="btn btn-info mt-2 col-12 hov"><i class="bi bi-search"></i><br>Read</button>
               </div>
-              <div class="col">
-                <button type="button" class="btn btn-warning mt-2 col-12"><i class="bi bi-pencil"></i><br>Update</button>
+              <div class="col" id="btnUpdate">
+                <button type="button" class="btn btn-warning mt-2 col-12 hov"><i class="bi bi-pencil"></i><br>Update</button>
               </div>
-              <div class="col">
-                <button type="button" class="btn btn-danger mt-2 col-12"><i class="bi bi-trash"></i><br>Delete</button>
+              <div class="col" id="btnDelete">
+                <button type="button" class="btn btn-danger mt-2 col-12 hov"><i class="bi bi-trash"></i><br>Delete</button>
               </div>
           </div>
       </div>
-      
       </form>
     </main>
     <footer></footer>
