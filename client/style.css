@@ -9,3 +9,14 @@ body {
 .hov:hover {
   outline: 2px solid var(--bs-light);
 }
+
+/* Custom switch color when checked */
+.form-check-input:checked {
+  background-color: var(--bs-secondary);
+  border-color: var(--bs-secondary);
+}
+
+/* Custom switch color for the handle when checked */
+.form-check-input:checked + .form-check-label::before {
+  background-color: var(--bs-light);
+}
