@@ -8,7 +8,7 @@ const btnDelete = document.getElementById("btnDelete");
 
 const form = document.getElementById("form");
 const table = document.getElementById("table");
-const tables = document.querySelectorAll("table");
+const checkbox = document.getElementById("tail")
 
 form.addEventListener("submit", handleSubmit);
 
