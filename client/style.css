@@ -6,6 +6,11 @@ body {
   background: linear-gradient(to top, var(--bs-indigo), var(--bs-info));
 }
 
+header{
+  width: 100%;
+}
+
+/* Hover for buttons*/
 .hov:hover {
   outline: 2px solid var(--bs-light);
 }
@@ -20,3 +25,6 @@ body {
 .form-check-input:checked + .form-check-label::before {
   background-color: var(--bs-light);
 }
+ .lbl{
+  padding: 12px 0 0 5px;
+ }

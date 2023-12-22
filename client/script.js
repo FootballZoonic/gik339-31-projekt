@@ -8,20 +8,27 @@ const btnDelete = document.getElementById("btnDelete");
 
 const form = document.getElementById("form");
 const table = document.getElementById("table");
-const checkbox = document.getElementById("tail")
+const checkbox = document.getElementById("tail");
 
 form.addEventListener("submit", handleSubmit);
 
 function handleSubmit(e) {
   e.preventDefault();
+  let checkboxValue;
+  if (checkbox.checked) {
+    checkboxValue = "on";
+  } else {
+    checkboxValue = "off";
+  }
+  console.log(checkboxValue)
   const animal = {
     species: form.species.value,
     animalName: form.animalName.value,
     weight: form.weight.value,
     sound: form.sound.value,
-    tail: form.tail.value,
+    tail: checkboxValue,
   };
-  console.log(animal);
+  console.log(animal); 
 
   const request = new Request(url, {
     method: "POST",
@@ -63,8 +70,13 @@ async function getData() {
 }
 
 btnSubmit.addEventListener("submit", (e) => console.log("submit"));
-btnSearch.addEventListener("click", (e) => console.log("search"));
+
 btnUpdate.addEventListener("click", (e) => console.log("update"));
+
+btnSearch.addEventListener("click",async (e) => {
+  console.log("search");
+  
+});
 
 btnDelete.addEventListener("click", (e) => {
   let ids = [];
@@ -89,7 +101,7 @@ btnDelete.addEventListener("click", (e) => {
       "content-type": "application/json",
     },
     body: JSON.stringify(ids),
-  });
+  }); 
   fetch(request).then((response) => {
     console.log(response);
     form.reset();
@@ -97,3 +109,29 @@ btnDelete.addEventListener("click", (e) => {
 });
 
 getData();
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const toastTrigger = document.getElementById('btnDelete');
+  const toastLiveExample = document.getElementById('liveToast');
+
+  if (toastTrigger && toastLiveExample) {
+    const toastBootstrap = new bootstrap.Toast(toastLiveExample, {
+      autohide: false // Set autohide option to false during toast initialization
+    });
+
+    toastTrigger.addEventListener('click', () => {
+      toastBootstrap.show();
+      
+    });
+
+    toastLiveExample.addEventListener('click', (e) => {
+      const button = event.target.closest('button[data-bs-dismiss="toast"]');
+      if (button) {
+        toastBootstrap.hide();
+      }
+    });
+  }
+});
+

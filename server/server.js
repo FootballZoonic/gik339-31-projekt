@@ -28,7 +28,7 @@ server.delete("/animals", (req, res) => {
   ids.forEach(id => {
     deleteAnimal(id);
   });
-  res.send(ids);
+  res.send(`removed animals with id/s: ${ids}`);
 });
 // create
 server.post("/animals", (req, res) => {
@@ -41,7 +41,9 @@ server.post("/animals", (req, res) => {
 
 // read
 server.get("/animals", (req, res) => {
-  const sql = "SELECT * FROM animals";
+  const { species, animalName, weight, sound, tail } = req.body;
+  
+    const sql = "SELECT * FROM animals";
 
   db.all(sql, (err, rows) => {
     if (err) {
@@ -76,6 +78,20 @@ function updateAnimal(id, species, animalName, weight, sound, tail) {
       console.log(`updated animal with id: ${id}`);
     }
   });
+}
+
+function getAnimal(species, animalName, weight, sound, tail)
+{
+    const searchQuery = `SELECT * FROM animals WHERE animalName = ${animalName}`;
+    // kör query
+    db.run(searchQuery, (err,rows) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(`${animalName} searched`);
+        return rows;
+      }
+    });
 }
 
 function createAnimal(species, animalName, weight, sound, tail) {
