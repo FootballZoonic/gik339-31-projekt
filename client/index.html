@@ -57,9 +57,9 @@
       </div>
     </header>
     <main class="container">
-      <form class="row" id="form">
-        <h3 class="fw-semibold">Animal details</h3>
-        <div class="mb-3 col-12 col-md-6">
+      <form class="row g-3" id="form">
+        <h3 class="fw-semibold col-12">Animal details</h3>
+        <div class="col-md-6">
           <label for="species" class="form-label">Species</label>
           <input
             type="text"
@@ -73,7 +73,7 @@
             required
           />
         </div>
-        <div class="mb-3 col-12 col-md-6">
+        <div class="col-md-6">
           <label for="name" class="form-label">Name</label>
           <input
             type="text"
@@ -87,7 +87,7 @@
             required
           />
         </div>
-        <div class="mb-3 col-12 col-md-6">
+<!--         <div class="mb-3 col-12 col-md-6">
           <label for="weight" class="form-label">Weight</label>
           <input
             type="text"
@@ -100,9 +100,9 @@
             oninput="this.value = this.value.replace(/[^0-9]/g, '')"
             required
           />
-        </div>
+        </div> -->
 
-        <div class="mb-3 col-12 col-md-6">
+        <div class="col-md-6">
           <label for="sound" class="form-label">Sound</label>
           <input
             type="text"
@@ -136,23 +136,25 @@
             No tail
           </label>
         </div> -->
-        <div class="form-check form-switch form-warning col-6 col-md-6 p-0">
+
+        <div class="form-check form-switch form-warning col-md-3 d-flex align-items-center">
           <input
-          class="form-check-input col-md-4 ms-3 mt-3"
+          class="form-check-input col-md-3 ms-3 mt-3"
           name="tail"
           type="checkbox"
           role="switch"
           id="tail"
           checked
           />
-          <label class="lbl form-check-label col-md-4 col-5" for="flexSwitchCheckChecked"
+          <label class="lbl form-check-label col-md-8 col-6" for="flexSwitchCheckChecked"
             >Has a tail </label
           >
         </div>
         
-        <div class="col-6 row pt-3 pb-3 pe-0">
-          <button class="col-5 col-md-4 btn btn-light ms-auto hov" type="reset">reset</button>
+        <div class="col-md-3 d-flex justify-content-end p-4">
+          <button class="col-6 col-md-6 btn btn-light ms-auto hov" type="reset">Reset</button>
         </div>
+      
         
         <div class="position-relative">
           <div class="row mt-4">
@@ -187,10 +189,8 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">ID</th>
             <th scope="col">Species</th>
             <th scope="col">Name</th>
-            <!-- <th scope="col">Weight</th> -->
             <th scope="col">Sound</th>
             <th scope="col">Tail</th>
           </tr>

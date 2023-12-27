@@ -23,26 +23,32 @@ const db = new sqlite3.Database("./animals.db");
 // delete
 
 server.delete("/animals", (req, res) => {
-  ids = req.body;
+  try {
+    ids = req.body;
 
-  ids.forEach(id => {
-    deleteAnimal(id);
-  });
-  res.send(`removed animals with id/s: ${ids}`);
+    ids.forEach(id => {
+      deleteAnimal(id);
+    });
+    res.send(`removed animals with id/s: ${ids}`);
+  
+  }
+  catch {res.sendStatus(500);}
 });
 // create
 server.post("/animals", (req, res) => {
-  const { species, animalName, weight, sound, tail } = req.body;
-  console.log(req.body);
-  const convertedTail = tail === "on" ? true : false;
-  createAnimal(species, animalName, weight, sound, convertedTail);
-  res.send(species);
+  try {
+    const { species, animalName, sound, tail } = req.body;
+    console.log(req.body);
+    const convertedTail = tail === "on" ? true : false;
+    createAnimal(species, animalName, sound, convertedTail);
+    res.send(species);
+  }
+
+  catch {res.sendStatus(500);}
 });
 
 // read
 server.get("/animals", (req, res) => {
-  const { species, animalName, weight, sound, tail } = req.body;
-  
     const sql = "SELECT * FROM animals";
 
   db.all(sql, (err, rows) => {
@@ -57,18 +63,26 @@ server.get("/animals", (req, res) => {
 // update
 
 server.put("/animals", (req, res) => {
-  const { id, species, animalName, weight, sound, tail } = req.body;
-  updateAnimal(id, species, animalName, weight, sound, tail);
-  res.send(id);
+  try {
+    const { id, species, animalName, sound, tail } = req.body;
+    const convertedTail = tail === "on" ? true : false;
+    console.log(id)
+    updateAnimal(id, species, animalName,  sound, convertedTail);
+    res.send(id);
+  }
+  catch (err){
+    console.log(err);
+    res.sendStatus(500);}
 });
 
 // database functions
-function updateAnimal(id, species, animalName, weight, sound, tail) {
+function updateAnimal(id, species, animalName, sound, tail) {
+  console.log(id,species,animalName,sound,tail)
   const updateQuery = `
     UPDATE animals
-    SET species = ${species}, animalName = ${animalName}, weight = ${weight}, sound = ${sound}, tail = ${tail}
+    SET species = "${species}", animalName = "${animalName}", sound = "${sound}", tail = ${tail}
     WHERE id = ${id};
-  `;
+  `; // weight
 
   // kör query
   db.run(updateQuery, (err) => {
@@ -80,13 +94,14 @@ function updateAnimal(id, species, animalName, weight, sound, tail) {
   });
 }
 
-function getAnimal(species, animalName, weight, sound, tail)
+function getAnimal(species, animalName, sound, tail)
 {
     const searchQuery = `SELECT * FROM animals WHERE animalName = ${animalName}`;
     // kör query
     db.run(searchQuery, (err,rows) => {
       if (err) {
         console.log(err);
+        res.status(500).send(err);
       } else {
         console.log(`${animalName} searched`);
         return rows;
@@ -94,10 +109,10 @@ function getAnimal(species, animalName, weight, sound, tail)
     });
 }
 
-function createAnimal(species, animalName, weight, sound, tail) {
+function createAnimal(species, animalName, sound, tail) {
   const insertQuery = `
-    INSERT INTO animals (species, animalName, weight, sound, tail)
-    VALUES ('${species}', '${animalName}', ${weight}, '${sound}', ${tail});
+    INSERT INTO animals (species, animalName, sound, tail)
+    VALUES ('${species}', '${animalName}', '${sound}', ${tail});
   `;
 
   // kör query
@@ -118,11 +133,10 @@ function createDatabase() {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     species TEXT NOT NULL,
     animalName TEXT NOT NULL,
-    weight INTEGER NOT NULL,
     sound TEXT NOT NULL,
     tail BOOLEAN NOT NULL
   );
-`;
+`; // weight
   // kör query
   db.run(createTableQuery, (err) => {
     if (err) {
