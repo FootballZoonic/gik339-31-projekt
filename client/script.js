@@ -1,7 +1,6 @@
 console.log("Group 31 quality");
 
 const url = "http://localhost:3000/animals";
-const btnSubmit = document.getElementById("btnSubmit");
 const btnSearch = document.getElementById("btnSearch");
 const btnUpdate = document.getElementById("btnUpdate");
 const btnDelete = document.getElementById("btnDelete");
@@ -39,6 +38,8 @@ function handleSubmit(e) {
   fetch(request).then((response) => {
     console.log(response);
     form.reset();
+    getData();
+    showToast("creation",`successfully added the animal ${animal.animalName}`);
   });
 }
 
@@ -47,46 +48,33 @@ async function getPromise() {
   return res.json();
 }
 
-//console.log(getPromise())
-
 async function getData() {
   const animals = await getPromise();
 
-    let tableContent = '';
-  
-    animals.forEach((animal) => {
-      tableContent += `
+  let tableContent = "";
+
+  animals.forEach((animal) => {
+    let tail;
+
+    if (animal.tail == true) {
+      tail = "Yes";
+    } else {
+      tail = "No";
+    }
+    tableContent += `
         <tr data-id="${animal.id}">
           <td class="tbId"><input type="checkbox" aria-label="Checkbox for following text input"></td>
           <td>${animal.species}</td>
           <td>${animal.animalName}</td>
           <td>${animal.sound}</td>
-          <td>${animal.tail}</td>
+          <td>${tail}</td>
         </tr>`;
-    });
-  
-    table.innerHTML = tableContent; 
-  }
-  
+  });
 
-  /* animals.forEach((animal) => {
-    const row = document.createElement("tr");
-    row.setAttribute("data-id", animal.id);
-    row.className("row")
+  table.innerHTML = tableContent;
+}
 
-    row.innerHTML = `
-          <td class="tbId"><input type="checkbox" aria-label="Checkbox for following text input"></td>
-          <td>${animal.species}</td>
-          <td>${animal.animalName}</td>
-          <td>${animal.sound}</td>
-          <td>${animal.tail}</td>
-        `;
-    table.appendChild(row);
-  }); */
-//}
-
-//btnSubmit.addEventListener("submit", (e) => console.log("submit"));
-
+// update
 btnUpdate.addEventListener("click", (e) => {
   let ids = [];
   let checkboxValue;
@@ -97,16 +85,14 @@ btnUpdate.addEventListener("click", (e) => {
   }
   for (i = 0; i < table.rows.length; i++) {
     const row = table.rows[i];
-    //console.log(`Row ${i + 1}:`, row);
     const checkbox = row.querySelector('input[type="checkbox"]');
     if (checkbox && checkbox.checked) {
       const dataId = row.getAttribute("data-id");
       ids.push(dataId);
     }
   }
-  if (ids.length != 1)
-  {
-    alert("Ogiltig selektion av användare.");
+  if (ids.length != 1) {
+    alert("Invalid selection of animals");
     return;
   }
   const animal = {
@@ -114,7 +100,7 @@ btnUpdate.addEventListener("click", (e) => {
     species: form.species.value,
     animalName: form.animalName.value,
     sound: form.sound.value,
-    tail: checkboxValue
+    tail: checkboxValue,
   };
 
   const request = new Request(url, {
@@ -127,12 +113,12 @@ btnUpdate.addEventListener("click", (e) => {
   fetch(request).then((response) => {
     console.log(response);
     form.reset();
+    getData();
+    showToast("update","fetched update");
   });
 });
 
-btnSearch.addEventListener("click", async (e) => {
-  const tbody = table.getElementsByTagName('tbody')[0];
-  //tbody.innerHTML = '';
+btnSearch.addEventListener("click", (e) => {
   getData();
 });
 
@@ -148,6 +134,10 @@ btnDelete.addEventListener("click", (e) => {
       ids.push(dataId);
     }
   }
+  if (ids.length < 1) {
+    alert("Invalid selection of animals");
+    return;
+  }
   console.log(ids);
 
   const request = new Request(url, {
@@ -160,29 +150,28 @@ btnDelete.addEventListener("click", (e) => {
   fetch(request).then((response) => {
     console.log(response);
     form.reset();
+    getData();
+    showToast("delete","successfully deleted the animal/s");
   });
 });
 
-
-
-document.addEventListener("DOMContentLoaded", function () {
-  const toastTrigger = document.getElementById("btnDelete");
+function showToast(toastSmall, toastBody)
+{
   const toastLiveExample = document.getElementById("liveToast");
 
-  if (toastTrigger && toastLiveExample) {
-    const toastBootstrap = new bootstrap.Toast(toastLiveExample, {
-      autohide: false, // Set autohide option to false during toast initialization
-    });
+  document.getElementsByClassName("toast-small")[0].innerHTML = toastSmall;
+  document.getElementsByClassName("toast-body")[0].innerHTML = toastBody; 
+  
+  const toastBootstrap = new bootstrap.Toast(toastLiveExample, {
+    autohide: false, // Set autohide option to false during toast initialization
+  });
 
-    toastTrigger.addEventListener("click", () => {
-      toastBootstrap.show();
-    });
+  toastLiveExample.addEventListener("click", (e) => {
+    const button = event.target.closest('button[data-bs-dismiss="toast"]');
+    if (button) {
+      toastBootstrap.hide();
+    }
+  });
 
-    toastLiveExample.addEventListener("click", (e) => {
-      const button = event.target.closest('button[data-bs-dismiss="toast"]');
-      if (button) {
-        toastBootstrap.hide();
-      }
-    });
-  }
-});
+  toastBootstrap.show();
+}
