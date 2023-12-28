@@ -64,9 +64,10 @@ server.get("/animals", (req, res) => {
 
 server.put("/animals", (req, res) => {
   try {
+    console.log(req.body)
     const { id, species, animalName, sound, tail } = req.body;
     const convertedTail = tail === "on" ? true : false;
-    console.log(id)
+    console.log(req.body);
     updateAnimal(id, species, animalName,  sound, convertedTail);
     res.send(id);
   }
@@ -94,21 +95,6 @@ function updateAnimal(id, species, animalName, sound, tail) {
   });
 }
 
-function getAnimal(species, animalName, sound, tail)
-{
-    const searchQuery = `SELECT * FROM animals WHERE animalName = ${animalName}`;
-    // kör query
-    db.run(searchQuery, (err,rows) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send(err);
-      } else {
-        console.log(`${animalName} searched`);
-        return rows;
-      }
-    });
-}
-
 function createAnimal(species, animalName, sound, tail) {
   const insertQuery = `
     INSERT INTO animals (species, animalName, sound, tail)
@@ -121,6 +107,18 @@ function createAnimal(species, animalName, sound, tail) {
       console.log(err);
     } else {
       console.log(`${animalName} inserted!`);
+    }
+  });
+}
+
+function deleteAnimal(id) {
+  const removeAnimalQuery = `DELETE FROM animals WHERE id = ${id}`;
+  
+  db.run(removeAnimalQuery, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(`animal with id: ${id} was removed!`);
     }
   });
 }
@@ -143,18 +141,6 @@ function createDatabase() {
       console.log(err);
     } else {
       console.log("table created!");
-    }
-  });
-}
-
-function deleteAnimal(id) {
-  const removeAnimalQuery = `DELETE FROM animals WHERE id = ${id}`;
-
-  db.run(removeAnimalQuery, (err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(`animal with id: ${id} was removed!`);
     }
   });
 }

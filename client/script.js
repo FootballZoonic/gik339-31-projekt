@@ -12,6 +12,8 @@ const checkbox = document.getElementById("tail");
 form.addEventListener("submit", handleSubmit);
 
 function handleSubmit(e) {
+  let ids = [];
+  let submitMethod;
   e.preventDefault();
   let checkboxValue;
   if (checkbox.checked) {
@@ -20,7 +22,7 @@ function handleSubmit(e) {
     checkboxValue = "off";
   }
   console.log(checkboxValue);
-  const animal = {
+  let animal = {
     species: form.species.value,
     animalName: form.animalName.value,
     sound: form.sound.value,
@@ -28,18 +30,54 @@ function handleSubmit(e) {
   };
   console.log(animal);
 
+  for (i = 0; i < table.rows.length; i++) {
+    const row = table.rows[i];
+    const checkbox = row.querySelector('input[type="checkbox"]');
+    if (checkbox && checkbox.checked) {
+      const dataId = row.getAttribute("data-id");
+      ids.push(dataId);
+    }
+  }
+  if (ids.length > 1) {
+    alert("Invalid selection of animals");
+    return;
+  } else if (ids.length == 1) {
+    submitMethod = "PUT";
+    console.log(ids[0])
+
+    animal = {
+      id: ids[0],
+      species: form.species.value,
+      animalName: form.animalName.value,
+      sound: form.sound.value,
+      tail: checkboxValue,
+    };
+    console.log(animal)
+  }else {
+    submitMethod = "POST";
+  }
+
+  console.log("relevant",animal)
   const request = new Request(url, {
-    method: "POST",
+    method: submitMethod,
     headers: {
       "content-type": "application/json",
     },
+    
     body: JSON.stringify(animal),
   });
   fetch(request).then((response) => {
     console.log(response);
     form.reset();
     getData();
-    showToast("creation",`successfully added the animal ${animal.animalName}`);
+    if (submitMethod == "POST")
+    {
+      showToast("creation", `successfully added the animal ${animal.animalName}`);
+    } 
+    else {
+      showToast("creation", `successfully updated the animal ${animal.animalName}`);
+    }
+   
   });
 }
 
@@ -55,20 +93,25 @@ async function getData() {
 
   animals.forEach((animal) => {
     let tail;
+    let bgColor;
 
     if (animal.tail == true) {
       tail = "Yes";
+      bgColor = "#0dcaf0";
     } else {
       tail = "No";
+      bgColor = "#dc3545";
     }
     tableContent += `
-        <tr data-id="${animal.id}">
-          <td class="tbId"><input type="checkbox" aria-label="Checkbox for following text input"></td>
-          <td>${animal.species}</td>
-          <td>${animal.animalName}</td>
-          <td>${animal.sound}</td>
-          <td>${tail}</td>
-        </tr>`;
+    <tr data-id="${animal.id}">
+    <td class="tbId"><input type="checkbox" aria-label="Checkbox for following text input"></td>
+    <td>${animal.species}</td>
+    <td>${animal.animalName}</td>
+    <td>${animal.sound}</td>
+    <td style="background-color: ${bgColor}">${tail}</td>
+  </tr>
+  
+  `;
   });
 
   table.innerHTML = tableContent;
@@ -78,6 +121,7 @@ async function getData() {
 btnUpdate.addEventListener("click", (e) => {
   let ids = [];
   let checkboxValue;
+
   if (checkbox.checked) {
     checkboxValue = "on";
   } else {
@@ -88,6 +132,11 @@ btnUpdate.addEventListener("click", (e) => {
     const checkbox = row.querySelector('input[type="checkbox"]');
     if (checkbox && checkbox.checked) {
       const dataId = row.getAttribute("data-id");
+
+      form.species.value = row.cells[1].textContent;
+      form.animalName.value = row.cells[2].textContent;
+      form.sound.value = row.cells[3].textContent;
+      form.tail.value = row.cells[4].textContent;
       ids.push(dataId);
     }
   }
@@ -95,33 +144,13 @@ btnUpdate.addEventListener("click", (e) => {
     alert("Invalid selection of animals");
     return;
   }
-  const animal = {
-    id: ids[0],
-    species: form.species.value,
-    animalName: form.animalName.value,
-    sound: form.sound.value,
-    tail: checkboxValue,
-  };
-
-  const request = new Request(url, {
-    method: "PUT",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(animal),
-  });
-  fetch(request).then((response) => {
-    console.log(response);
-    form.reset();
-    getData();
-    showToast("update","fetched update");
-  });
 });
 
 btnSearch.addEventListener("click", (e) => {
   getData();
 });
 
+// Delete
 btnDelete.addEventListener("click", (e) => {
   let ids = [];
 
@@ -149,19 +178,18 @@ btnDelete.addEventListener("click", (e) => {
   });
   fetch(request).then((response) => {
     console.log(response);
-    form.reset();
+    //form.reset();
     getData();
-    showToast("delete","successfully deleted the animal/s");
+    showToast("delete", "successfully deleted the animal/s");
   });
 });
 
-function showToast(toastSmall, toastBody)
-{
+function showToast(toastSmall, toastBody) {
   const toastLiveExample = document.getElementById("liveToast");
 
   document.getElementsByClassName("toast-small")[0].innerHTML = toastSmall;
-  document.getElementsByClassName("toast-body")[0].innerHTML = toastBody; 
-  
+  document.getElementsByClassName("toast-body")[0].innerHTML = toastBody;
+
   const toastBootstrap = new bootstrap.Toast(toastLiveExample, {
     autohide: false, // Set autohide option to false during toast initialization
   });

@@ -1,6 +1,5 @@
 html,
 body {
-  font-size: 62,5%;
   height: 100%;
   margin: 0;
   background: linear-gradient(to top, var(--bs-indigo), var(--bs-info));

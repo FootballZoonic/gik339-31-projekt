@@ -59,28 +59,27 @@
     <main class="container">
       <form class="row g-3" id="form">
         <h3 class="fw-semibold col-12">Animal details</h3>
-        <div class="col-md-6">
+        <div class="col-md-6 col-12">
           <label for="species" class="form-label">Species</label>
           <input
             type="text"
             name="species"
             class="form-control"
-            id="name"
-            pattern="^[a-zA-Z]+$"
+            
             aria-label="species"
             aria-describedby="firstNameHelp"
             placeholder="Type of animal"
             required
           />
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 col-12">
           <label for="name" class="form-label">Name</label>
           <input
             type="text"
             name="animalName"
             class="form-control"
             id="name"
-            pattern="^[a-zA-Z]+$"
+            
             aria-label="name"
             aria-describedby="firstNameHelp"
             placeholder="Fido"
@@ -88,13 +87,13 @@
           />
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 col-12">
           <label for="sound" class="form-label">Sound</label>
           <input
             type="text"
             name="sound"
             class="form-control"
-            pattern="^[a-zA-Z]+$"
+            
             aria-label="First Name"
             aria-describedby="firstNameHelp"
             placeholder="Bark"
@@ -117,7 +116,7 @@
         </div>
         
         <div class="col-md-3 col-6 d-flex justify-content-end p-4">
-          <button class="col-6 col-md-6 btn btn-light ms-auto hov" type="reset">Reset</button>
+          <button class="col-6 col-md-6 btn btn-light ms-auto hov" type="reset">Reset <i class="bi bi-arrow-counterclockwise"></i></button>
         </div>
       
         
@@ -129,7 +128,7 @@
                 name="submitAnimalForm"
                 class="btn btn-success mt-2 col-12 hov"
               >
-                <i class="bi bi-plus-circle"></i><br />Create
+                <i class="bi bi-arrow-right"></i><br />Submit
               </button>
             </div>
             <div class="col" id="btnSearch">
