@@ -118,8 +118,8 @@ function deleteAnimal(id) {
   });
 }
 
+// skapa databas
 function createDatabase() {
-  // skapa databas
   // definiera tabell
   const createTableQuery = `
   CREATE TABLE IF NOT EXISTS animals (
