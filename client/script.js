@@ -4,7 +4,6 @@ const url = "http://localhost:3000/animals";
 const btnSearch = document.getElementById("btnSearch");
 const btnUpdate = document.getElementById("btnUpdate");
 const btnDelete = document.getElementById("btnDelete");
-
 const form = document.getElementById("form");
 const table = document.getElementById("table");
 const checkbox = document.getElementById("tail");
@@ -21,15 +20,12 @@ function handleSubmit(e) {
   } else {
     checkboxValue = "off";
   }
-  console.log(checkboxValue);
   let animal = {
     species: form.species.value,
     animalName: form.animalName.value,
     sound: form.sound.value,
     tail: checkboxValue,
   };
-  console.log(animal);
-
   for (i = 0; i < table.rows.length; i++) {
     const row = table.rows[i];
     const checkbox = row.querySelector('input[type="checkbox"]');
@@ -43,7 +39,6 @@ function handleSubmit(e) {
     return;
   } else if (ids.length == 1) {
     submitMethod = "PUT";
-    console.log(ids[0])
 
     animal = {
       id: ids[0],
@@ -52,32 +47,31 @@ function handleSubmit(e) {
       sound: form.sound.value,
       tail: checkboxValue,
     };
-    console.log(animal)
-  }else {
+  } else {
     submitMethod = "POST";
   }
-
-  console.log("relevant",animal)
   const request = new Request(url, {
     method: submitMethod,
     headers: {
       "content-type": "application/json",
     },
-    
+
     body: JSON.stringify(animal),
   });
   fetch(request).then((response) => {
-    console.log(response);
     form.reset();
     getData();
-    if (submitMethod == "POST")
-    {
-      showToast("creation", `successfully added the animal ${animal.animalName}`);
-    } 
-    else {
-      showToast("creation", `successfully updated the animal ${animal.animalName}`);
+    if (submitMethod == "POST") {
+      showToast(
+        "creation",
+        `successfully added the animal ${animal.animalName}`
+      );
+    } else {
+      showToast(
+        "creation",
+        `successfully updated the animal ${animal.animalName}`
+      );
     }
-   
   });
 }
 
@@ -156,7 +150,6 @@ btnDelete.addEventListener("click", (e) => {
 
   for (i = 0; i < table.rows.length; i++) {
     const row = table.rows[i];
-    console.log(`Row ${i + 1}:`, row);
     const checkbox = row.querySelector('input[type="checkbox"]');
     if (checkbox && checkbox.checked) {
       const dataId = row.getAttribute("data-id");
@@ -167,7 +160,6 @@ btnDelete.addEventListener("click", (e) => {
     alert("Invalid selection of animals");
     return;
   }
-  console.log(ids);
 
   const request = new Request(url, {
     method: "DELETE",
@@ -177,8 +169,6 @@ btnDelete.addEventListener("click", (e) => {
     body: JSON.stringify(ids),
   });
   fetch(request).then((response) => {
-    console.log(response);
-    //form.reset();
     getData();
     showToast("delete", "successfully deleted the animal/s");
   });
@@ -191,7 +181,7 @@ function showToast(toastSmall, toastBody) {
   document.getElementsByClassName("toast-body")[0].innerHTML = toastBody;
 
   const toastBootstrap = new bootstrap.Toast(toastLiveExample, {
-    autohide: false, // Set autohide option to false during toast initialization
+    autohide: false,
   });
 
   toastLiveExample.addEventListener("click", (e) => {

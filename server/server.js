@@ -26,30 +26,29 @@ server.delete("/animals", (req, res) => {
   try {
     ids = req.body;
 
-    ids.forEach(id => {
+    ids.forEach((id) => {
       deleteAnimal(id);
     });
     res.send(`removed animals with id/s: ${ids}`);
-  
+  } catch {
+    res.sendStatus(500);
   }
-  catch {res.sendStatus(500);}
 });
 // create
 server.post("/animals", (req, res) => {
   try {
     const { species, animalName, sound, tail } = req.body;
-    console.log(req.body);
     const convertedTail = tail === "on" ? true : false;
     createAnimal(species, animalName, sound, convertedTail);
     res.send(species);
+  } catch {
+    res.sendStatus(500);
   }
-
-  catch {res.sendStatus(500);}
 });
 
 // read
 server.get("/animals", (req, res) => {
-    const sql = "SELECT * FROM animals";
+  const sql = "SELECT * FROM animals";
 
   db.all(sql, (err, rows) => {
     if (err) {
@@ -64,21 +63,17 @@ server.get("/animals", (req, res) => {
 
 server.put("/animals", (req, res) => {
   try {
-    console.log(req.body)
     const { id, species, animalName, sound, tail } = req.body;
     const convertedTail = tail === "on" ? true : false;
-    console.log(req.body);
-    updateAnimal(id, species, animalName,  sound, convertedTail);
+    updateAnimal(id, species, animalName, sound, convertedTail);
     res.send(id);
+  } catch (err) {
+    res.sendStatus(500);
   }
-  catch (err){
-    console.log(err);
-    res.sendStatus(500);}
 });
 
 // database functions
 function updateAnimal(id, species, animalName, sound, tail) {
-  console.log(id,species,animalName,sound,tail)
   const updateQuery = `
     UPDATE animals
     SET species = "${species}", animalName = "${animalName}", sound = "${sound}", tail = ${tail}
@@ -113,7 +108,7 @@ function createAnimal(species, animalName, sound, tail) {
 
 function deleteAnimal(id) {
   const removeAnimalQuery = `DELETE FROM animals WHERE id = ${id}`;
-  
+
   db.run(removeAnimalQuery, (err) => {
     if (err) {
       console.log(err);
