@@ -13,8 +13,8 @@ form.addEventListener("submit", handleSubmit);
 function handleSubmit(e) {
   let ids = [];
   let submitMethod;
-  e.preventDefault();
   let checkboxValue;
+  e.preventDefault();
   if (checkbox.checked) {
     checkboxValue = "on";
   } else {
