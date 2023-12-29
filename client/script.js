@@ -68,7 +68,7 @@ function handleSubmit(e) {
       );
     } else {
       showToast(
-        "creation",
+        "update",
         `successfully updated the animal ${animal.animalName}`
       );
     }
